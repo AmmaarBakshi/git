@@ -745,8 +745,11 @@ static void do_rerere_one_path(struct index_state *istate,
 			if (copy_file(the_repository,
 				      postimage,
 				      path, 0666)) {
+				int saved_errno = errno;
+
 				if (!had_postimage)
 					unlink_or_warn(postimage);
+				errno = saved_errno;
 				error_errno(_("could not copy resolution for '%s'"),
 					    path);
 				goto out;
